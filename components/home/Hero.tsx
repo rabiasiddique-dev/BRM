@@ -39,14 +39,14 @@ export const Hero: React.FC = () => {
 
         {/* Cinematic Headline */}
         <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.1]">
-          Building Trust. <br className="hidden sm:inline" />
-          Creating Opportunities. <br className="hidden sm:inline" />
-          <span className="gold-gradient-text">Shaping Real Estate.</span>
+          Building Brands. <br className="hidden sm:inline" />
+          Marketing Projects. <br className="hidden sm:inline" />
+          <span className="gold-gradient-text">Creating Real Estate Opportunities.</span>
         </h1>
 
         {/* Corporate Subheadline */}
         <p className="text-slate-300 text-base sm:text-xl max-w-3xl mx-auto leading-relaxed font-normal">
-          Strategic real estate marketing, consultancy and project representation for residential and commercial developments across Karachi.
+          Blessing Marketing & Real Estate delivers strategic marketing, consultancy and project-focused real estate solutions.
         </p>
 
         {/* Action CTAs */}
