@@ -10,59 +10,46 @@ import {
   Phone,
   MessageCircle,
   ChevronDown,
-  Home,
+  ChevronRight,
   Building2,
-  Key,
-  MapPin,
-  TrendingUp,
-  Briefcase,
-  BookOpen,
-  Play,
-  Share2,
-  Newspaper,
-  HelpCircle,
   Users,
-  Award,
-  Contact,
-  Landmark,
-  Building,
+  Briefcase,
+  Play,
+  Newspaper,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  LayoutGrid,
+  Compass,
+  TrendingUp,
+  FolderKanban,
+  Layers,
+  LucideIcon
 } from 'lucide-react';
 import { companyData } from '@/data/company';
 import { createWhatsAppLink } from '@/lib/utils';
 
-interface NavDropdownGroup {
-  title: string;
-  key: string;
-  widthClass?: string;
-  items: {
-    name: string;
-    href: string;
-    description?: string;
-    icon?: React.ElementType;
-    badge?: string;
-  }[];
-  featuredProjects?: {
-    name: string;
-    href: string;
-    tagline: string;
-    badge?: string;
-  }[];
-  subGroups?: {
-    heading: string;
-    items: { name: string; href: string }[];
-  }[];
+interface SubNavItem {
+  name: string;
+  href: string;
+  description: string;
+  icon: LucideIcon;
+}
+
+interface NavItem {
+  name: string;
+  href?: string;
+  children?: SubNavItem[];
 }
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [mobileExpandedGroup, setMobileExpandedGroup] = useState<string | null>(null);
+  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
+
   const pathname = usePathname();
-  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,13 +59,14 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close menus on route change
+  // Close mobile drawer & dropdowns on route change
   useEffect(() => {
     setMobileMenuOpen(false);
     setActiveDropdown(null);
+    setMobileExpanded(null);
   }, [pathname]);
 
-  // Click outside listener to close dropdowns
+  // Handle click outside to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(event.target as Node)) {
@@ -89,91 +77,123 @@ export const Navbar: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleMouseEnter = (key: string) => {
-    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-    setActiveDropdown(key);
+  const handleMouseEnter = (name: string) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    setActiveDropdown(name);
   };
 
   const handleMouseLeave = () => {
-    dropdownTimeoutRef.current = setTimeout(() => {
+    hoverTimeoutRef.current = setTimeout(() => {
       setActiveDropdown(null);
-    }, 180);
+    }, 150);
   };
 
-  const toggleDropdown = (key: string) => {
-    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-    setActiveDropdown(prev => (prev === key ? null : key));
+  const toggleMobileAccordion = (name: string) => {
+    setMobileExpanded(mobileExpanded === name ? null : name);
   };
 
-  const dropdowns: NavDropdownGroup[] = [
+  const navItems: NavItem[] = [
+    { name: 'Home', href: '/' },
     {
-      title: 'Properties & Projects',
-      key: 'properties',
-      widthClass: 'w-[520px]',
-      items: [
-        { name: 'Browse All Properties', href: '/properties', description: 'Explore houses, plots, apartments & shops', icon: Home, badge: 'All Listings' },
-        { name: 'Featured Projects', href: '/projects', description: 'Off-plan developments with flexible plans', icon: Building2, badge: 'New Launch' },
-        { name: 'Sell Your Property', href: '/sell-your-property', description: 'List property with BMR market experts', icon: TrendingUp },
-        { name: 'Rent Your Property', href: '/rent-your-property', description: 'Find verified corporate & residential tenants', icon: Key },
-        { name: 'Areas We Serve', href: '/areas', description: 'Comprehensive Karachi locality guides', icon: MapPin },
-      ],
-      featuredProjects: [
-        { name: 'Blessing Heights Clifton', href: '/projects/blessing-heights-clifton', tagline: '22-Story Coastal Luxury Tower', badge: 'Clifton' },
-        { name: 'Blessing Corporate Plaza', href: '/projects/dha-city-commercial-plaza', tagline: 'Prime Commercial Headquarters', badge: 'DHA City' },
-        { name: 'Gulshan Enclave', href: '/projects/gulshan-avenue-residences', tagline: 'Main University Road Residences', badge: 'Gulshan' },
-      ],
-      subGroups: [
+      name: 'Company',
+      children: [
         {
-          heading: 'Popular Karachi Locations',
-          items: [
-            { name: 'DHA Karachi', href: '/properties/dha-karachi' },
-            { name: 'Gulshan-e-Iqbal', href: '/properties/gulshan-karachi' },
-            { name: 'Clifton', href: '/properties/clifton-karachi' },
-            { name: 'Bahria Town', href: '/properties/bahria-town-karachi' },
-            { name: 'Taiser Town', href: '/properties/taiser-town' },
-          ],
+          name: 'About Us',
+          href: '/about',
+          description: 'Our legacy, vision & core corporate values',
+          icon: Building2
         },
-      ],
+        {
+          name: 'Executive Team',
+          href: '/team',
+          description: 'Meet our leadership & senior real estate consultants',
+          icon: Users
+        }
+      ]
     },
     {
-      title: 'Services & Investment',
-      key: 'services',
-      widthClass: 'w-[420px]',
-      items: [
-        { name: 'Our Advisory Services', href: '/services', description: 'Full marketing, sales & consultancy', icon: Briefcase },
-        { name: 'Investment Advisory', href: '/investment', description: 'High ROI & rental yield portfolios', icon: TrendingUp, badge: 'High ROI' },
-        { name: 'Property Knowledge Guides', href: '/guides', description: 'Complete buying, selling & legal guides', icon: BookOpen },
-        { name: '5-Step Buying Guide', href: '/guides/buying', description: 'Step-by-step verified property acquisition', icon: Sparkles },
-        { name: 'Investment Strategy Guide', href: '/guides/investment', description: 'Maximizing ROI in Karachi real estate', icon: Landmark },
-      ],
+      name: 'Services',
+      children: [
+        {
+          name: 'All Services',
+          href: '/services',
+          description: 'Full suite of real estate & marketing solutions',
+          icon: LayoutGrid
+        },
+        {
+          name: 'Project Marketing',
+          href: '/services/project-marketing',
+          description: 'Developer representation & sales marketing campaigns',
+          icon: Briefcase
+        },
+        {
+          name: 'Real Estate Consultancy',
+          href: '/services/real-estate-consultancy',
+          description: 'Strategic property advisory & market analysis',
+          icon: Compass
+        },
+        {
+          name: 'Investment Advisory',
+          href: '/services/investment-consultancy',
+          description: 'High-yield real estate investment guidance',
+          icon: TrendingUp
+        },
+        {
+          name: 'Commercial Real Estate',
+          href: '/services/commercial-real-estate-advisory',
+          description: 'Corporate office spaces & commercial retail hubs',
+          icon: Building2
+        }
+      ]
     },
     {
-      title: 'Media & Hub',
-      key: 'media',
-      widthClass: 'w-[380px]',
-      items: [
-        { name: 'Video Tours & Reels', href: '/videos', description: 'HD property walkthroughs & site reviews', icon: Play, badge: 'Watch HD' },
-        { name: 'Social Media Hub', href: '/social', description: 'YouTube, Instagram & Facebook feeds', icon: Share2 },
-        { name: 'Market Insights & News', href: '/blog', description: 'Karachi real estate trends & market updates', icon: Newspaper },
-        { name: 'Frequently Asked Questions', href: '/faq', description: 'Instant answers to buying & transfer queries', icon: HelpCircle },
-      ],
+      name: 'Projects & Work',
+      children: [
+        {
+          name: 'Featured Projects',
+          href: '/projects',
+          description: 'Current exclusive residential & commercial developments',
+          icon: FolderKanban
+        },
+        {
+          name: 'Delivered Portfolio',
+          href: '/portfolio',
+          description: 'Proven track record & delivered project campaigns',
+          icon: Layers
+        }
+      ]
     },
     {
-      title: 'About Us',
-      key: 'about',
-      widthClass: 'w-[380px]',
-      items: [
-        { name: 'About Blessing Marketing', href: '/about', description: 'Leadership by Syed M. Hassan Shah', icon: Users },
-        { name: 'Our Proven Portfolio', href: '/portfolio', description: 'Decades of successful property deals', icon: Award },
-        { name: 'Our Branch Offices', href: '/offices', description: 'Visit DHA Phase 5 & Gulshan offices', icon: MapPin },
-        { name: 'Contact Our Experts', href: '/contact', description: 'Direct hotline & office consultation', icon: Contact },
-      ],
+      name: 'Media & Insights',
+      children: [
+        {
+          name: 'Media Coverage',
+          href: '/media',
+          description: 'Press releases, TV coverage & corporate news',
+          icon: Newspaper
+        },
+        {
+          name: 'Market Insights',
+          href: '/insights',
+          description: 'Market trends, expert reports & real estate blogs',
+          icon: Sparkles
+        },
+        {
+          name: 'Video Showcase',
+          href: '/videos',
+          description: 'Project walkthroughs & property video tours',
+          icon: Play
+        }
+      ]
     },
+    { name: 'Contact', href: '/contact' }
   ];
 
   const primaryWhatsAppUrl = createWhatsAppLink(
     companyData.primaryWhatsApp,
-    "Hello Blessing Marketing, I am browsing your website and would like to inquire about properties & investment opportunities in Karachi."
+    "Hello Blessing Marketing & Real Estate, I am interested in consulting regarding real estate project marketing and services."
   );
 
   return (
@@ -186,13 +206,14 @@ export const Navbar: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Brand Logo */}
-          <Link href="/" className="group flex items-center gap-2.5 shrink-0">
+          {/* Corporate Brand Logo */}
+          <Link href="/" className="group flex items-center gap-3 shrink-0">
             <div className="relative w-11 h-11 rounded-full overflow-hidden ring-2 ring-gold-500/40 group-hover:ring-gold-400/80 transition-all duration-300 shadow-lg shadow-gold-500/10 shrink-0">
               <Image
                 src="/logo/bmr-logo.png"
                 alt="Blessing Marketing & Real Estate (Pvt. Ltd)"
                 fill
+                sizes="44px"
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
                 priority
               />
@@ -201,282 +222,253 @@ export const Navbar: React.FC = () => {
               <span className="font-serif text-lg sm:text-xl font-bold tracking-tight text-white block leading-none">
                 BLESSING
               </span>
-              <span className="text-[8px] sm:text-[9px] tracking-widest text-gold-400 font-medium uppercase block mt-0.5">
+              <span className="text-[8px] sm:text-[9px] tracking-widest text-gold-400 font-semibold uppercase block mt-0.5">
                 Marketing & Real Estate
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Corporate Navigation */}
           <nav ref={navRef} className="hidden lg:flex items-center space-x-1 font-sans">
-            <Link
-              href="/"
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
-                pathname === '/'
-                  ? 'text-gold-400 bg-gold-500/15 border border-gold-500/30'
-                  : 'text-slate-200 hover:text-gold-300 hover:bg-slate-900/80'
-              }`}
-            >
-              Home
-            </Link>
+            {navItems.map((item) => {
+              const hasChildren = item.children && item.children.length > 0;
 
-            {dropdowns.map((group) => {
-              const isOpen = activeDropdown === group.key;
-              const isChildActive = group.items.some(i => pathname === i.href) ||
-                (group.subGroups && group.subGroups.some(sg => sg.items.some(si => pathname === si.href)));
+              // Check if parent or any child is active
+              const isChildActive = hasChildren && item.children?.some(
+                (child) => pathname === child.href || (child.href !== '/' && pathname.startsWith(child.href))
+              );
+              const isDirectActive = item.href && (pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)));
+              const isActive = isDirectActive || isChildActive;
+              const isOpen = activeDropdown === item.name;
 
-              return (
-                <div
-                  key={group.key}
-                  className="relative"
-                  onMouseEnter={() => handleMouseEnter(group.key)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <button
-                    onClick={() => toggleDropdown(group.key)}
-                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
-                      isOpen || isChildActive
-                        ? 'text-gold-400 bg-gold-500/15 border border-gold-500/30'
-                        : 'text-slate-200 hover:text-gold-300 hover:bg-slate-900/80'
-                    }`}
+              if (hasChildren) {
+                return (
+                  <div
+                    key={item.name}
+                    className="relative"
+                    onMouseEnter={() => handleMouseEnter(item.name)}
+                    onMouseLeave={handleMouseLeave}
                   >
-                    <span>{group.title}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180 text-gold-400' : 'text-slate-400'}`} />
-                  </button>
+                    <button
+                      onClick={() => setActiveDropdown(isOpen ? null : item.name)}
+                      className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+                        isActive || isOpen
+                          ? 'text-gold-400 bg-gold-500/15 border border-gold-500/30'
+                          : 'text-slate-200 hover:text-gold-300 hover:bg-slate-900/80'
+                      }`}
+                      aria-expanded={isOpen}
+                    >
+                      <span>{item.name}</span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          isOpen ? 'rotate-180 text-gold-400' : 'text-slate-400'
+                        }`}
+                      />
+                    </button>
 
-                  {/* Dropdown Container with hover bridge */}
-                  {isOpen && (
-                    <div className={`absolute top-full left-0 pt-2 ${group.widthClass || 'w-96'} z-50 animate-in fade-in slide-in-from-top-1 duration-150`}>
-                      <div className="bg-slate-950 border border-gold-500/40 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85)] p-4 text-white">
-                        <div className="grid grid-cols-1 gap-1">
-                          {group.items.map((item) => {
-                            const Icon = item.icon || Home;
-                            const isActive = pathname === item.href;
+                    {/* Dropdown Panel */}
+                    {isOpen && (
+                      <div className="absolute top-full left-0 pt-2 w-80 sm:w-96 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="bg-slate-950/95 backdrop-blur-2xl border border-gold-500/30 rounded-2xl p-2.5 shadow-2xl shadow-black/90 ring-1 ring-white/10 space-y-1">
+                          {item.children?.map((child) => {
+                            const Icon = child.icon;
+                            const isChildSelected = pathname === child.href || (child.href !== '/' && pathname.startsWith(child.href));
+
                             return (
                               <Link
-                                key={item.href}
-                                href={item.href}
+                                key={child.href}
+                                href={child.href}
                                 onClick={() => setActiveDropdown(null)}
-                                className={`flex items-start gap-3 p-2.5 rounded-xl transition-all ${
-                                  isActive
-                                    ? 'bg-gold-500/20 border border-gold-500/40 text-gold-300'
-                                    : 'hover:bg-slate-900 text-slate-200 hover:text-white border border-transparent hover:border-slate-800'
+                                className={`group flex items-start gap-3 p-3 rounded-xl transition-all duration-200 border ${
+                                  isChildSelected
+                                    ? 'bg-gold-500/15 border-gold-500/40 text-gold-300'
+                                    : 'border-transparent hover:bg-slate-900/90 hover:border-gold-500/25'
                                 }`}
                               >
-                                <div className="w-8 h-8 rounded-lg bg-slate-900 border border-gold-500/20 flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                                  <Icon className="w-4 h-4 text-gold-400" />
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 ${
+                                  isChildSelected
+                                    ? 'bg-gold-500 text-slate-950 font-bold'
+                                    : 'bg-gold-500/10 text-gold-400 border border-gold-500/20 group-hover:bg-gold-500 group-hover:text-slate-950'
+                                }`}>
+                                  <Icon className="w-4.5 h-4.5" />
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2">
-                                    <span className="font-semibold text-xs text-white group-hover:text-gold-300">{item.name}</span>
-                                    {item.badge && (
-                                      <span className="bg-gradient-to-r from-gold-500 to-amber-600 text-slate-950 text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded shadow-sm">
-                                        {item.badge}
-                                      </span>
-                                    )}
+                                <div className="space-y-0.5">
+                                  <div className="text-xs font-bold text-slate-100 group-hover:text-gold-300 transition-colors flex items-center gap-1">
+                                    <span>{child.name}</span>
+                                    <ChevronRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-gold-400" />
                                   </div>
-                                  {item.description && (
-                                    <p className="text-[11px] text-slate-400 mt-0.5 truncate">{item.description}</p>
-                                  )}
+                                  <p className="text-[11px] text-slate-400 font-normal leading-snug group-hover:text-slate-300">
+                                    {child.description}
+                                  </p>
                                 </div>
                               </Link>
                             );
                           })}
                         </div>
-
-                        {/* Featured Off-Plan Projects Section if present */}
-                        {group.featuredProjects && (
-                          <div className="pt-3 border-t border-slate-800/90 mt-2">
-                            <div className="flex items-center justify-between px-1 mb-2">
-                              <span className="text-[10px] font-extrabold uppercase tracking-widest text-gold-400 flex items-center gap-1">
-                                <Sparkles className="w-3 h-3 text-gold-400" />
-                                Featured Off-Plan Developments
-                              </span>
-                              <Link
-                                href="/projects"
-                                onClick={() => setActiveDropdown(null)}
-                                className="text-[10px] text-slate-400 hover:text-gold-300 flex items-center gap-0.5 font-semibold"
-                              >
-                                View All <ArrowRight className="w-3 h-3" />
-                              </Link>
-                            </div>
-                            <div className="grid grid-cols-3 gap-1.5">
-                              {group.featuredProjects.map(proj => (
-                                <Link
-                                  key={proj.href}
-                                  href={proj.href}
-                                  onClick={() => setActiveDropdown(null)}
-                                  className="bg-slate-900/90 hover:bg-gold-500/20 text-slate-200 hover:text-gold-300 border border-slate-800 hover:border-gold-500/40 rounded-xl p-2 transition-all block text-left"
-                                >
-                                  <div className="text-[11px] font-bold text-white truncate">{proj.name}</div>
-                                  <div className="text-[9px] text-slate-400 truncate mt-0.5">{proj.tagline}</div>
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Sub-groups (e.g. Popular Areas) */}
-                        {group.subGroups && group.subGroups.map((sg, idx) => (
-                          <div key={idx} className="pt-3 border-t border-slate-800/90 mt-2">
-                            <div className="text-[10px] font-extrabold uppercase tracking-widest text-gold-400 mb-2 px-1 flex items-center gap-1">
-                              <MapPin className="w-3 h-3 text-gold-400" />
-                              {sg.heading}
-                            </div>
-                            <div className="flex flex-wrap gap-1.5">
-                              {sg.items.map(subItem => (
-                                <Link
-                                  key={subItem.href}
-                                  href={subItem.href}
-                                  onClick={() => setActiveDropdown(null)}
-                                  className="bg-slate-900 hover:bg-gold-500/20 text-slate-300 hover:text-gold-300 border border-slate-800 hover:border-gold-500/40 rounded-lg px-2.5 py-1 text-[11px] font-medium transition-colors"
-                                >
-                                  {subItem.name}
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
                       </div>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href!}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+                    isActive
+                      ? 'text-gold-400 bg-gold-500/15 border border-gold-500/30'
+                      : 'text-slate-200 hover:text-gold-300 hover:bg-slate-900/80'
+                  }`}
+                >
+                  {item.name}
+                </Link>
               );
             })}
           </nav>
 
-          {/* Right CTAs */}
+          {/* Desktop Right CTAs */}
           <div className="hidden lg:flex items-center gap-3 shrink-0">
-            <a
-              href={`tel:${companyData.phoneNumbers[0].replace(/[^0-9]/g, '')}`}
-              className="text-slate-300 hover:text-white px-3.5 py-2 rounded-xl hover:bg-slate-900/80 transition-colors flex items-center gap-2 text-xs font-semibold border border-transparent hover:border-slate-800"
-              title="Call Sales Representative"
-            >
-              <Phone className="w-3.5 h-3.5 text-gold-400" />
-              <span>{companyData.phoneNumbers[0]}</span>
-            </a>
-
             <a
               href={primaryWhatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl shadow-lg transition-all hover:shadow-emerald-600/30"
+              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider px-3.5 py-2.5 rounded-xl shadow-lg transition-all hover:shadow-emerald-600/30"
+              title="Chat on WhatsApp"
             >
               <MessageCircle className="w-4 h-4 fill-current" />
               <span>WhatsApp</span>
             </a>
+
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 bg-gold-gradient hover:opacity-95 text-slate-950 font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl shadow-xl transition-all transform hover:scale-105"
+            >
+              <span>Let's Talk</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-xl text-slate-200 hover:text-white hover:bg-slate-800/60 focus:outline-none"
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6 text-gold-400" /> : <Menu className="w-6 h-6 text-slate-100" />}
-          </button>
+          {/* Mobile Navigation Menu Toggle */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <a
+              href={primaryWhatsAppUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-xl bg-emerald-600 text-white hover:bg-emerald-500"
+              title="WhatsApp"
+            >
+              <MessageCircle className="w-5 h-5 fill-current" />
+            </a>
+
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2.5 rounded-xl bg-slate-900 text-slate-200 hover:text-white border border-slate-800"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6 text-gold-400" /> : <Menu className="w-6 h-6 text-slate-100" />}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[65px] bg-slate-950 border-b border-gold-500/30 shadow-2xl p-5 transition-all max-h-[85vh] overflow-y-auto z-50">
+        <div className="lg:hidden fixed inset-x-0 top-[68px] bg-slate-950 border-b border-gold-500/30 shadow-2xl p-5 transition-all max-h-[85vh] overflow-y-auto z-50">
           <div className="space-y-2 mb-6">
-            <Link
-              href="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold uppercase tracking-wider ${
-                pathname === '/' ? 'text-gold-400 bg-gold-500/15 border-l-4 border-gold-500' : 'text-slate-200'
-              }`}
-            >
-              Home
-            </Link>
+            {navItems.map((item) => {
+              const hasChildren = item.children && item.children.length > 0;
+              const isExpanded = mobileExpanded === item.name;
+              const isChildActive = hasChildren && item.children?.some(
+                (child) => pathname === child.href || (child.href !== '/' && pathname.startsWith(child.href))
+              );
+              const isDirectActive = item.href && (pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)));
+              const isActive = isDirectActive || isChildActive;
 
-            {dropdowns.map((group) => {
-              const isExpanded = mobileExpandedGroup === group.key;
+              if (hasChildren) {
+                return (
+                  <div key={item.name} className="rounded-xl overflow-hidden border border-slate-900">
+                    <button
+                      onClick={() => toggleMobileAccordion(item.name)}
+                      className={`w-full flex items-center justify-between px-4 py-3 text-xs font-bold uppercase tracking-wider transition-colors ${
+                        isActive
+                          ? 'text-gold-400 bg-gold-500/10'
+                          : 'text-slate-200 hover:bg-slate-900'
+                      }`}
+                    >
+                      <span>{item.name}</span>
+                      <ChevronDown
+                        className={`w-4 h-4 text-gold-400 transition-transform duration-200 ${
+                          isExpanded ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+
+                    {isExpanded && (
+                      <div className="bg-slate-900/60 p-2 space-y-1 border-t border-slate-800">
+                        {item.children?.map((child) => {
+                          const Icon = child.icon;
+                          const isSubActive = pathname === child.href || (child.href !== '/' && pathname.startsWith(child.href));
+
+                          return (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold ${
+                                isSubActive
+                                  ? 'text-gold-400 bg-gold-500/15 border-l-2 border-gold-400'
+                                  : 'text-slate-300 hover:bg-slate-800'
+                              }`}
+                            >
+                              <Icon className="w-4 h-4 text-gold-400 shrink-0" />
+                              <div className="flex-1">
+                                <div className="text-slate-100 font-bold">{child.name}</div>
+                                <div className="text-[10px] text-slate-400 font-normal">{child.description}</div>
+                              </div>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
 
               return (
-                <div key={group.key} className="border-b border-slate-800/80 pb-2">
-                  <button
-                    onClick={() => setMobileExpandedGroup(isExpanded ? null : group.key)}
-                    className="w-full flex items-center justify-between px-4 py-3 text-slate-200 text-sm font-bold uppercase tracking-wider"
-                  >
-                    <span>{group.title}</span>
-                    <ChevronDown className={`w-4 h-4 text-gold-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {isExpanded && (
-                    <div className="pl-4 pr-2 space-y-1.5 pt-1 pb-3">
-                      {group.items.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center justify-between p-2.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-900"
-                        >
-                          <span>{item.name}</span>
-                          {item.badge && (
-                            <span className="bg-gradient-to-r from-gold-500 to-amber-600 text-slate-950 text-[9px] font-bold px-1.5 py-0.5 rounded">
-                              {item.badge}
-                            </span>
-                          )}
-                        </Link>
-                      ))}
-
-                      {group.featuredProjects && (
-                        <div className="pt-2">
-                          <div className="text-[10px] font-bold uppercase text-gold-400 px-2.5 mb-1">Featured Projects</div>
-                          {group.featuredProjects.map(proj => (
-                            <Link
-                              key={proj.href}
-                              href={proj.href}
-                              onClick={() => setMobileMenuOpen(false)}
-                              className="block p-2 rounded-lg text-xs text-slate-300 hover:text-gold-300"
-                            >
-                              {proj.name}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-
-                      {group.subGroups && group.subGroups.map((sg, idx) => (
-                        <div key={idx} className="pt-2">
-                          <div className="text-[10px] font-bold uppercase text-gold-400 px-2.5 mb-1">{sg.heading}</div>
-                          {sg.items.map(subItem => (
-                            <Link
-                              key={subItem.href}
-                              href={subItem.href}
-                              className="block p-2 rounded-lg text-xs text-slate-400 hover:text-gold-300"
-                              onClick={() => setMobileMenuOpen(false)}
-                            >
-                              {subItem.name}
-                            </Link>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <Link
+                  key={item.href}
+                  href={item.href!}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider ${
+                    isActive
+                      ? 'text-gold-400 bg-gold-500/15 border-l-4 border-gold-500'
+                      : 'text-slate-200 hover:bg-slate-900'
+                  }`}
+                >
+                  <span>{item.name}</span>
+                  <ArrowRight className="w-4 h-4 text-slate-500" />
+                </Link>
               );
             })}
           </div>
 
-          <div className="border-t border-slate-800 pt-4 space-y-2">
+          <div className="border-t border-slate-800 pt-4 space-y-2.5">
+            <Link
+              href="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-center gap-2 bg-gold-gradient text-slate-950 font-bold p-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg w-full"
+            >
+              <span>Let's Talk</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+
             <a
               href={`tel:${companyData.phoneNumbers[0].replace(/[^0-9]/g, '')}`}
-              className="flex items-center gap-3 bg-slate-900 border border-slate-800 p-3 rounded-xl text-slate-200"
+              className="flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 p-3 rounded-xl text-slate-200 text-xs font-semibold"
             >
               <Phone className="w-4 h-4 text-gold-400" />
-              <div className="text-xs font-semibold">{companyData.phoneNumbers[0]}</div>
-            </a>
-            <a
-              href={primaryWhatsAppUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 bg-emerald-600 text-white font-bold p-3 rounded-xl text-xs uppercase tracking-wider shadow-lg w-full"
-            >
-              <MessageCircle className="w-4 h-4 fill-current" />
-              <span>Connect on WhatsApp</span>
+              <span>Call Us: {companyData.phoneNumbers[0]}</span>
             </a>
           </div>
         </div>
@@ -484,3 +476,4 @@ export const Navbar: React.FC = () => {
     </header>
   );
 };
+

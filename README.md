@@ -1,24 +1,23 @@
-# 🏢 BRM - Blessing Real Estate & Marketing
+# 🏢 BRM - Blessing Marketing & Real Estate (Pvt. Ltd)
 
-A modern, high-performance, and feature-rich Real Estate & Property Marketing platform built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, and **Framer Motion**.
+A modern, high-performance, executive corporate platform built for **Blessing Marketing & Real Estate (Pvt. Ltd)** using **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, and **Lucide Icons**.
 
-![Blessing Real Estate](public/icon.png)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-brm--mu.vercel.app-gold?style=for-the-badge&logo=vercel)](https://brm-mu.vercel.app)
 
 ---
 
 ## 🌟 Key Features
 
-- 🏡 **Comprehensive Property Listings**: Search and filter residential and commercial properties by buy/rent, city, location, price, bedrooms, and property type.
-- 📍 **Area & Location Guides**: In-depth analysis and location insights for premium real estate developments and housing societies.
-- 💼 **Professional Services**:
-  - Buying & Selling Consultancy
-  - Rental & Property Management
-  - Investment Advisory & Portfolio Optimization
-  - Legal & Documentation Assistance
-- 🎥 **Virtual Tours & Video Showcase**: Embedded video walkthroughs and property tours.
-- 🏢 **Office Directory**: Interactive location guides for regional offices.
-- 📱 **Fully Responsive & Animated**: Modern UI designed with smooth Framer Motion micro-interactions, dark-mode accents, glassmorphism, and seamless mobile responsiveness.
-- ⚡ **Optimized Performance**: Next.js 14 App Router with Server-Side Rendering (SSR) and optimized image delivery.
+- 💎 **Luxury Executive Navigation**: 6 streamlined top-level items with glassmorphic, interactive drop-down menus featuring sub-item icons and descriptive subtitles (`Company`, `Services`, `Projects & Work`, `Media & Insights`).
+- 🏢 **Developer & Corporate Portfolio**: Dedicated representation for mega real estate project developments across Karachi's premier corridors (DHA, Clifton, Gulshan-e-Iqbal, Bahria Town).
+- 💼 **Full Capabilities & Advisory**:
+  - Developer Project Marketing & Sales Representation
+  - Strategic Real Estate Consultancy & Valuation
+  - High-Yield Investment Advisory
+  - Commercial & Corporate Real Estate
+- 🎥 **Media & Social Hub**: HD video walkthroughs, CEO insights, and integrated social media feeds.
+- 📱 **Mobile First & Responsive**: Interactive mobile drawer with accordion-style nested sub-menus.
+- ⚡ **Optimized Performance**: Next.js 14 App Router with Server-Side Rendering (SSR) and optimized image delivery (`sizes` prop optimization).
 
 ---
 
@@ -27,9 +26,8 @@ A modern, high-performance, and feature-rich Real Estate & Property Marketing pl
 - **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **Deployment**: [Vercel](https://vercel.com/)
+- **Deployment**: [Vercel](https://vercel.com/) (Live at [brm-mu.vercel.app](https://brm-mu.vercel.app))
 
 ---
 
@@ -38,35 +36,34 @@ A modern, high-performance, and feature-rich Real Estate & Property Marketing pl
 ```text
 BRM/
 ├── app/                      # Next.js 14 App Router Pages & Layouts
-│   ├── about/                # About Us page
-│   ├── areas/                # Area guides & housing society insights
-│   ├── blog/                 # Real estate market news & articles
-│   ├── contact/              # Contact form & location info
+│   ├── about/                # Corporate background, vision & values
+│   ├── areas/                # Karachi corridor location guides
+│   ├── blog/                 # Real estate market news & guides
+│   ├── contact/              # Executive contact form & offices
 │   ├── faq/                  # Frequently asked questions
-│   ├── guides/               # Buyer & Seller guides
-│   ├── investment/           # Investment consultancy & calculator
-│   ├── offices/              # Office locations directory
-│   ├── portfolio/            # Completed projects & success stories
-│   ├── projects/             # Current & upcoming mega projects
+│   ├── insights/             # Market insights & CEO commentary
+│   ├── media/                # Video showcase & social hub
+│   ├── portfolio/            # Delivered track record & case studies
+│   ├── projects/             # Current featured project developments ([slug])
 │   ├── properties/           # Dynamic property listings & details ([slug])
-│   ├── rent-your-property/   # Listing form for rentals
-│   ├── sell-your-property/   # Listing form for property sales
-│   ├── services/             # Real estate services overview
-│   ├── videos/               # Video tours & media gallery
+│   ├── services/             # Services overview & dynamic service pages ([slug])
+│   ├── team/                 # Executive team & senior consultants
+│   ├── videos/               # Video tour gallery
 │   ├── globals.css           # Global Tailwind CSS styles
 │   ├── layout.tsx            # Root layout wrapper
-│   └── page.tsx              # Homepage
-├── components/               # Reusable UI components
-│   ├── Navbar.tsx            # Navigation bar with dropdowns
-│   ├── Footer.tsx            # Footer section
-│   ├── PropertyCard.tsx      # Property display cards
-│   ├── HeroSearch.tsx        # Homepage hero search bar
-│   └── ...                   # Custom UI components
-├── data/                     # Mock data & property definitions
+│   └── page.tsx              # Corporate Homepage
+├── components/               # Modular UI Components
+│   ├── layout/               # Navbar (with Dropdowns), Footer, Mobile Sticky CTA
+│   ├── home/                 # Hero, Capabilities, Featured Projects, Leadership, Stats
+│   ├── projects/             # Project cards & gallery components
+│   ├── properties/           # Property cards & filter controls
+│   ├── common/               # Section headings, WhatsApp CTA buttons, forms
+│   └── blog/                 # Insights & news cards
+├── data/                     # Structured TypeScript datasets (company, projects, services)
 ├── lib/                      # Helper functions & utility methods
-├── public/                   # Static assets, logos, and images
+├── public/                   # Static assets & corporate logos
 ├── types/                    # TypeScript type definitions
-├── tailwind.config.ts        # Tailwind configuration
+├── tailwind.config.ts        # Tailwind CSS design system configuration
 └── tsconfig.json             # TypeScript configuration
 ```
 
@@ -104,7 +101,7 @@ BRM/
 
 ## 📦 Build & Production Test
 
-To test the production build locally before deploying:
+To test the production build locally:
 
 ```bash
 npm run build
@@ -113,37 +110,15 @@ npm run start
 
 ---
 
-## 🌐 Deployment on Vercel
+## 🌐 Live Vercel Deployment
 
-Follow these steps to deploy this project live on **Vercel**:
+This repository is connected to **Vercel** with automatic continuous integration and deployment. Every push to the `main` branch automatically deploys live to Vercel:
 
-1. **Push your code to GitHub**:
-   Make sure all your changes are pushed to your GitHub repository:
-   ```bash
-   git add .
-   git commit -m "Initial commit with documentation"
-   git branch -M main
-   git remote add origin https://github.com/rabiasiddique-dev/BRM.git
-   git push -u origin main
-   ```
-
-2. **Connect to Vercel**:
-   - Go to [Vercel](https://vercel.com/) and sign in with your GitHub account.
-   - Click **Add New** -> **Project**.
-   - Select the `BRM` repository from your GitHub repositories list.
-
-3. **Configure & Deploy**:
-   - **Framework Preset**: Next.js (automatically detected)
-   - **Root Directory**: `./`
-   - **Build Command**: `npm run build`
-   - Click **Deploy**.
-
-4. **Live URL**:
-   Vercel will build and deploy your project in under a minute, providing a custom `.vercel.app` live domain!
+- **Live URL**: [https://brm-mu.vercel.app](https://brm-mu.vercel.app)
 
 ---
 
 ## 👨‍💻 Developer & Maintenance
 
-Developed for **Blessing Real Estate & Marketing (BRM)**.
-For questions or inquiries, please contact the development team.
+Maintained for **Blessing Marketing & Real Estate (Pvt. Ltd)**.
+For inquiries, please visit [brm-mu.vercel.app/contact](https://brm-mu.vercel.app/contact).

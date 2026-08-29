@@ -2,31 +2,22 @@
 
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { FAQ } from '@/data/faqs';
+import { FAQItem } from '@/data/faqs';
 
 interface FAQAccordionProps {
-  faqs: FAQ[];
+  faqs: FAQItem[];
   showCategories?: boolean;
 }
 
-const categoryLabels: Record<FAQ['category'], string> = {
-  buying: 'Buying Property',
-  selling: 'Selling Property',
-  renting: 'Renting',
-  investment: 'Investment',
-  general: 'General',
-  services: 'Our Services',
-};
-
 export const FAQAccordion: React.FC<FAQAccordionProps> = ({ faqs, showCategories = true }) => {
   const [openId, setOpenId] = useState<string | null>(null);
-  const [activeCategory, setActiveCategory] = useState<FAQ['category'] | 'all'>('all');
+  const [activeCategory, setActiveCategory] = useState<string>('all');
 
   const categories = Array.from(new Set(faqs.map(f => f.category)));
   const filtered = activeCategory === 'all' ? faqs : faqs.filter(f => f.category === activeCategory);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Category Filter Pills */}
       {showCategories && (
         <div className="flex flex-wrap gap-2">
@@ -50,7 +41,7 @@ export const FAQAccordion: React.FC<FAQAccordionProps> = ({ faqs, showCategories
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
-              {categoryLabels[cat]}
+              {cat}
             </button>
           ))}
         </div>

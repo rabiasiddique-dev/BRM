@@ -1,116 +1,59 @@
-export interface FAQ {
+export interface FAQItem {
   id: string;
+  category: string;
   question: string;
   answer: string;
-  category: 'buying' | 'selling' | 'renting' | 'investment' | 'general' | 'services';
 }
 
-export const faqsData: FAQ[] = [
-  // Buying
+export type FAQ = FAQItem;
+
+export const faqsData: FAQItem[] = [
   {
     id: "faq-1",
-    question: "How can I buy a property through Blessing Marketing?",
-    answer: "Simply browse our property listings online and contact our team via WhatsApp, phone, or our inquiry form. Our consultant will arrange a site visit, guide you through documentation and title verification, and support you until the transfer is complete.",
-    category: "buying",
+    category: "Company Overview",
+    question: "Who is Blessing Marketing & Real Estate?",
+    answer: "Blessing Marketing & Real Estate (Pvt. Ltd) is a premier real estate marketing, consultancy, and project representation company based in Karachi. Led by CEO Syed M. Hassan Shah, we specialize in corporate marketing for residential and commercial developments, investment advisory, and transaction representation."
   },
   {
     id: "faq-2",
-    question: "What documents are required to buy a property in Karachi?",
-    answer: "Generally you'll need your CNIC (original + copies), two passport-size photographs, and the purchase price funds. The seller provides the original title documents, which our team verifies before any token money is paid.",
-    category: "buying",
+    category: "Services",
+    question: "What services do you provide?",
+    answer: "We offer end-to-end real estate capabilities: Project Marketing, Real Estate Consultancy, Commercial Advisory, Investment Consultancy, Corporate Real Estate Services, Property Marketing, Sales & Business Development, Rental/Asset Management, and Digital Real Estate Marketing."
   },
   {
     id: "faq-3",
-    question: "How do you verify a property's legal status?",
-    answer: "We conduct a full title check at the relevant authority (Cantonment Board, KDA, MDA, or DHA), confirm all outstanding dues are cleared, verify the seller's ownership chain, and only proceed after every document checks out clean.",
-    category: "buying",
+    category: "Developer Partnerships",
+    question: "Do you work with real estate developers and builders?",
+    answer: "Yes. We act as exclusive or preferred marketing and sales representation partners for real estate builders and developers across Karachi. We handle full project positioning, omnichannel branding, video walkthrough production, launch events, and sales pipeline conversion."
   },
   {
     id: "faq-4",
-    question: "How long does the property transfer process take?",
-    answer: "Transfer timelines vary by authority. DHA Cantonment transfers typically take 30–60 days. KDA/MDA transfers may take 45–90 days. Our team handles the entire process and keeps you informed at every step.",
-    category: "buying",
+    category: "Project Representation",
+    question: "Do you provide project marketing for off-plan developments?",
+    answer: "Yes, Project Marketing is one of our primary core strengths. We represent high-profile developments such as Blessing Heights Clifton, Blessing Corporate Boulevard, and Gulshan Premium Enclave."
   },
-  // Selling
   {
     id: "faq-5",
-    question: "How can I sell my property through Blessing Marketing?",
-    answer: "Fill out our 'Sell Your Property' form or contact us directly. Our team will assess your property, prepare a market valuation, list it across our digital channels and investor network, and find you a qualified buyer at the best possible price.",
-    category: "selling",
+    category: "Investment Advisory",
+    question: "Do you provide investment consultancy for overseas Pakistanis and institutional investors?",
+    answer: "Yes. We advise clients, family offices, and overseas Pakistanis on high-ROI commercial opportunities, inflation-hedged capital growth, and rental yield portfolios with complete legal documentation and remote transaction support."
   },
   {
     id: "faq-6",
-    question: "What marketing do you provide for my property?",
-    answer: "We offer professional photography, featured listings on our website, targeted social media promotion, video tours, and direct outreach to our verified investor and buyer network — maximizing exposure for your property.",
-    category: "selling",
+    category: "Market Coverage",
+    question: "Which real estate markets do you serve?",
+    answer: "We primarily serve Karachi's prime residential and commercial corridors, including DHA Karachi (Phases 1 through 8 & DHA City), Clifton, Gulshan-e-Iqbal, Main University Road, and Bahria Town."
   },
   {
     id: "faq-7",
-    question: "How do you determine the right price for my property?",
-    answer: "We conduct a Comparative Market Analysis (CMA) using recent comparable sales in your area, current demand, property condition, and location advantages to recommend the most competitive and realistic asking price.",
-    category: "selling",
+    category: "Developer Outreach",
+    question: "How can real estate developers partner with Blessing Marketing?",
+    answer: "Developers can contact our corporate office directly or submit a project proposal via our website contact form under 'Project Marketing' or 'Partnership'. CEO Syed M. Hassan Shah and our senior project team will schedule a private presentation."
   },
-  // Renting
   {
     id: "faq-8",
-    question: "Do you offer rental services for landlords?",
-    answer: "Yes. We handle complete tenant sourcing, background verification, tenancy agreement drafting, and ongoing lease management. We connect your property with corporate and individual tenants to minimize vacancy.",
-    category: "renting",
-  },
-  {
-    id: "faq-9",
-    question: "How do you vet tenants?",
-    answer: "We conduct CNIC verification, employment confirmation, reference checks, and assess rental history before presenting any tenant to a landlord. All tenancy agreements are properly drafted and legally binding.",
-    category: "renting",
-  },
-  {
-    id: "faq-10",
-    question: "How can I list my property for rent?",
-    answer: "Visit our 'Rent Your Property' page and fill out the listing form with your property details, location, and expected rent. Our team will contact you within 24 hours to proceed.",
-    category: "renting",
-  },
-  // Investment
-  {
-    id: "faq-11",
-    question: "Do you provide investment consultation?",
-    answer: "Absolutely. Our investment advisory service covers high-yield commercial properties, off-plan project bookings, pre-launch developer rates, and residential plots with strong capital appreciation potential across Karachi.",
-    category: "investment",
-  },
-  {
-    id: "faq-12",
-    question: "Which areas of Karachi offer the best investment potential?",
-    answer: "DHA phases (especially Phase 6, 7, 8), Clifton, Bahria Town, and rapidly developing corridors like Taiser Town offer strong returns. The right choice depends on your budget, timeline, and risk appetite — our consultants can guide you.",
-    category: "investment",
-  },
-  {
-    id: "faq-13",
-    question: "Can overseas Pakistanis invest through Blessing Marketing?",
-    answer: "Yes. We assist overseas Pakistanis with remote property selection, documentation, power of attorney arrangements, and Roshan Digital Account-eligible investments. Your investment is managed with full transparency.",
-    category: "investment",
-  },
-  // General
-  {
-    id: "faq-14",
-    question: "Which areas of Karachi do you cover?",
-    answer: "We actively serve DHA (all phases), Clifton, Gulshan-e-Iqbal, PECHS, Bahria Town Karachi, Taiser Town, Malir, and surrounding neighbourhoods. Our two offices in DHA and Gulshan give us city-wide coverage.",
-    category: "general",
-  },
-  {
-    id: "faq-15",
-    question: "How can I schedule a site visit?",
-    answer: "Use our 'Schedule a Site Visit' form, WhatsApp us directly, or call our office. We'll arrange a convenient time for a guided physical inspection of any property you're interested in.",
-    category: "general",
-  },
-  {
-    id: "faq-16",
-    question: "What are your office hours?",
-    answer: "Both our DHA Phase-II Extension and Gulshan-e-Iqbal offices are open Monday to Saturday, 10:00 AM to 7:00 PM. You can also reach us via WhatsApp outside office hours.",
-    category: "general",
-  },
-  {
-    id: "faq-17",
-    question: "Is there any fee for property consultation?",
-    answer: "Initial consultation is free. Our agency commission applies only on successful transactions — for buying/selling, the standard brokerage commission applies as per market norms. There are no hidden charges.",
-    category: "general",
-  },
+    category: "Contact & Consultations",
+    question: "How can clients contact your team or visit your offices?",
+    answer: "You can reach us directly on our hotline 0300-3413372 or via WhatsApp. You are also welcome to visit our permanently staffed offices in DHA Phase-II Extension and Gulshan-e-Iqbal, Karachi."
+  }
 ];

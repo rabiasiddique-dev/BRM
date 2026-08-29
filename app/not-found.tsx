@@ -1,35 +1,41 @@
 import React from 'react';
 import Link from 'next/link';
-import { Home, Search } from 'lucide-react';
+import { Building2, ArrowRight } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="pt-32 pb-20 min-h-[70vh] flex items-center justify-center max-w-7xl mx-auto px-4 text-center">
-      <div className="space-y-6 max-w-md">
-        <div className="w-20 h-20 rounded-3xl bg-slate-900 text-gold-400 font-serif font-bold text-3xl flex items-center justify-center mx-auto shadow-2xl border border-gold-500/30">
-          404
+    <div className="min-h-[80vh] flex items-center justify-center pt-24 pb-16 px-4 bg-slate-950 text-white font-sans">
+      <div className="max-w-xl mx-auto text-center space-y-6">
+        
+        <div className="w-16 h-16 rounded-full bg-gold-500/15 border border-gold-500/30 text-gold-400 flex items-center justify-center mx-auto">
+          <Building2 className="w-8 h-8" />
         </div>
-        <h1 className="font-serif text-3xl font-bold text-slate-900">Page Not Found</h1>
-        <p className="text-slate-600 text-sm leading-relaxed">
-          The property listing or page you are looking for may have been moved or updated.
+
+        <div className="font-serif text-6xl font-extrabold text-gold-400">404</div>
+
+        <h1 className="font-serif text-3xl font-bold">We couldn't find that page.</h1>
+
+        <p className="text-slate-300 text-sm leading-relaxed">
+          The requested corporate page may have been moved or updated as part of our website repositioning.
         </p>
 
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/"
-            className="w-full sm:w-auto bg-slate-900 text-white font-bold px-6 py-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-slate-800"
+            className="bg-gold-gradient text-slate-950 font-bold px-7 py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg"
           >
-            <Home className="w-4 h-4 text-gold-400" />
-            <span>Go to Homepage</span>
+            Back Home
           </Link>
+
           <Link
-            href="/properties"
-            className="w-full sm:w-auto bg-gold-gradient text-slate-950 font-bold px-6 py-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:opacity-95"
+            href="/portfolio"
+            className="bg-slate-900 hover:bg-slate-800 text-white font-bold px-7 py-3.5 rounded-xl border border-slate-800 text-xs uppercase tracking-wider transition-all inline-flex items-center gap-2"
           >
-            <Search className="w-4 h-4" />
-            <span>Browse Properties</span>
+            <span>Explore Our Work</span>
+            <ArrowRight className="w-4 h-4 text-gold-400" />
           </Link>
         </div>
+
       </div>
     </div>
   );

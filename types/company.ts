@@ -14,12 +14,13 @@ export interface TeamMember {
   id: string;
   name: string;
   designation: string;
-  department: 'management' | 'sales' | 'consultants' | 'marketing';
+  department: 'Leadership' | 'Sales' | 'Marketing' | 'Consultants' | 'Operations';
   phone?: string;
   whatsapp?: string;
   email?: string;
   bio?: string;
   avatar?: string;
+  linkedin?: string;
 }
 
 export interface TimelineEvent {
@@ -37,14 +38,42 @@ export interface AreaServed {
   image?: string;
 }
 
+export interface CorporateStat {
+  value: number;
+  suffix?: string;
+  label: string;
+  sublabel?: string;
+}
+
+export interface CoreValue {
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export interface ProcessStep {
+  step: string;
+  title: string;
+  description: string;
+}
+
+export interface Partner {
+  name: string;
+  category: string;
+  logo: string;
+}
+
 export interface CompanyInfo {
   name: string;
   shortName?: string;
   abbreviation?: string;
   tagline: string;
   subTagline?: string;
+  headline: string;
   foundedYear?: string;
   story?: string;
+  mission: string;
+  vision: string;
   representative: {
     name: string;
     title: string;
@@ -58,7 +87,11 @@ export interface CompanyInfo {
     avatar: string;
     linkedin?: string;
   };
-  team?: TeamMember[];
+  team: TeamMember[];
+  stats: CorporateStat[];
+  values: CoreValue[];
+  processSteps: ProcessStep[];
+  partners: Partner[];
   email: string;
   phoneNumbers: string[];
   primaryWhatsApp: string;

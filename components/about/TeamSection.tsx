@@ -7,13 +7,14 @@ import { SectionHeading } from '@/components/common/SectionHeading';
 import { TeamMember } from '@/types/company';
 
 const departmentLabels: Record<TeamMember['department'], string> = {
-  management: 'Management',
-  consultants: 'Property Consultants',
-  sales: 'Sales Team',
-  marketing: 'Marketing Team',
+  Leadership: 'Leadership',
+  Consultants: 'Property Consultants',
+  Sales: 'Sales Team',
+  Marketing: 'Marketing Team',
+  Operations: 'Operations Team',
 };
 
-const departmentOrder: TeamMember['department'][] = ['management', 'consultants', 'sales', 'marketing'];
+const departmentOrder: TeamMember['department'][] = ['Leadership', 'Consultants', 'Sales', 'Marketing', 'Operations'];
 
 export const TeamSection: React.FC = () => {
   const team = companyData.team || [];
